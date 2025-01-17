@@ -1,43 +1,25 @@
-import os
-import sys
+from constants import *
+from functions import *
+from classes.player import Player
 
-import pygame
-
-
-def load_image(name):
-    fullname = os.path.join('data', name)
-    if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
-    image = pygame.image.load(fullname)
-    return image
-
-
-def terminate():
-    pygame.quit()
-    sys.exit()
-
-
-BLACK = pygame.Color("#000000")
-WHITE = pygame.Color("#ffffff")
-RED = pygame.Color("#ff0000")
-GREEN = pygame.Color("#00ff00")
-BLUE = pygame.Color("#0000ff")
-SIZE = WIDTH, HEIGHT = (500, 500)
-FPS = 60
 
 all_sprites = pygame.sprite.Group()
+entities = pygame.sprite.Group()
+moving = pygame.sprite.Group()
 
 pygame.init()
 screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
+player = Player(all_sprites, load_image("mar.png"), WIDTH / 2, HEIGHT / 2)
+dt = 1 / FPS
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: terminate()
+        if event.type == pygame.KEYDOWN: player.move(event.key, entities, dt / 1000)
 
     screen.fill(BLACK)
     all_sprites.draw(screen)
-    all_sprites.update()
+    all_sprites.update(clock.tick())
     pygame.display.flip()
-    clock.tick(FPS)
+    dt = clock.tick(FPS)
