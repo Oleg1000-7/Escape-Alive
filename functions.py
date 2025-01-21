@@ -14,3 +14,6 @@ def load_image(name):
 def terminate():
     pygame.quit()
     sys.exit()
+
+def generate_map():
+    pass

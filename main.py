@@ -11,15 +11,15 @@ pygame.init()
 screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
 player = Player(all_sprites, load_image("mar.png"), WIDTH / 2, HEIGHT / 2)
-dt = 1 / FPS
 
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: terminate()
-        if event.type == pygame.KEYDOWN: player.move(event.key, entities, dt / 1000)
+    for i in MOVE_KEYS:
+        if pygame.key.get_pressed()[i]: player.move(i, entities)
 
     screen.fill(BLACK)
     all_sprites.draw(screen)
     all_sprites.update(clock.tick())
     pygame.display.flip()
-    dt = clock.tick(FPS)
+    clock.tick(FPS)

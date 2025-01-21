@@ -10,18 +10,17 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect().move(self.pos_x, self.pos_y)
         self.speed = speed
 
-    def move(self, key, entities, delta_time):
-        delta_x, delta_y = 0.0, 0.0
-        speed = self.speed * delta_time
+    def move(self, key, entities):
+        delta_x, delta_y = 0, 0
 
-        if key == pygame.K_UP:
-            delta_x, delta_y = 0, -speed
-        if key == pygame.K_DOWN:
-            delta_x, delta_y = 0, speed
-        if key == pygame.K_LEFT:
-            delta_x, delta_y = -speed, 0
-        if key == pygame.K_RIGHT:
-            delta_x, delta_y = speed, 0
+        if key == pygame.K_w:
+            delta_x, delta_y = 0, -self.speed
+        if key == pygame.K_s:
+            delta_x, delta_y = 0, self.speed
+        if key == pygame.K_a:
+            delta_x, delta_y = -self.speed, 0
+        if key == pygame.K_d:
+            delta_x, delta_y = self.speed, 0
 
         self.rect.x += delta_x
         self.rect.y += delta_y
