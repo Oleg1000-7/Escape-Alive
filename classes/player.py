@@ -1,10 +1,9 @@
-import pygame
-
+from classes.sprite_base import SpriteObject
 from constants import *
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self, all_sprites, player_image, pos_x, pos_y, speed=10):
-        super().__init__(all_sprites)
+class Player(SpriteObject):
+    def __init__(self, player_image, pos_x, pos_y, speed=10):
+        super().__init__()
         self.image = player_image
         self.pos_x, self.pos_y = pos_x, pos_y
         self.rect = self.image.get_rect().move(self.pos_x, self.pos_y)
