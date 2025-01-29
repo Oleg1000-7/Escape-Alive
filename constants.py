@@ -1,3 +1,4 @@
+import json
 import pygame
 
 
@@ -8,6 +9,11 @@ GREEN = pygame.Color("#00ff00")
 BLUE = pygame.Color("#0000ff")
 SIZE = WIDTH, HEIGHT = (500, 500)
 CELL_SIZE = 50
-MAP_SIZE = 10
+INTERACT_DISTANCE = CELL_SIZE * 1.5
+MAP_SIZE_CELLS = 64
+MAP_SIZE_PIXELS = CELL_SIZE * MAP_SIZE_CELLS
 FPS = 60
-MOVE_KEYS = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]
+with open("key_binds.json", "r", encoding="utf-8") as keys_file:
+    keys = json.load(keys_file)
+ACTIVE_KEYS = {key: eval(f"pygame.{value}") for key, value in keys.items()}
+MOVE_KEYS = [ACTIVE_KEYS["up"], ACTIVE_KEYS["left"], ACTIVE_KEYS["down"], ACTIVE_KEYS["right"]]

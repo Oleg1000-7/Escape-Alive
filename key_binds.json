@@ -1,0 +1,7 @@
+{
+  "up": "K_w",
+  "left": "K_a",
+  "down": "K_s",
+  "right": "K_d",
+  "interaction": "K_e"
+}

@@ -1,29 +1,48 @@
 from classes.sprite_base import SpriteObject
 from constants import *
+from sprite_groups import entities, interactive
+from functions import get_sprite_dist
+
 
 class Player(SpriteObject):
     def __init__(self, player_image, pos_x, pos_y, speed=10):
         super().__init__()
         self.image = player_image
-        self.pos_x, self.pos_y = pos_x, pos_y
-        self.rect = self.image.get_rect().move(self.pos_x, self.pos_y)
+        self.x, self.y = pos_x, pos_y
+        self.rect = self.image.get_rect().move(pos_x, pos_y)
         self.speed = speed
 
-    def move(self, key, entities):
+    def key_pressed(self, key, current_tick_keys):
+        if key in MOVE_KEYS:
+            self.move(key)
+        elif key in current_tick_keys:
+            if key == ACTIVE_KEYS["interaction"]: self.interact()
+
+    def move(self, key):
         delta_x, delta_y = 0, 0
 
-        if key == pygame.K_w:
+        if key == ACTIVE_KEYS["up"]:
             delta_x, delta_y = 0, -self.speed
-        if key == pygame.K_s:
+        if key == ACTIVE_KEYS["down"]:
             delta_x, delta_y = 0, self.speed
-        if key == pygame.K_a:
+        if key == ACTIVE_KEYS["left"]:
             delta_x, delta_y = -self.speed, 0
-        if key == pygame.K_d:
+        if key == ACTIVE_KEYS["right"]:
             delta_x, delta_y = self.speed, 0
 
         self.rect.x += delta_x
         self.rect.y += delta_y
+        self.x += delta_x
+        self.y += delta_y
 
-        if pygame.sprite.spritecollideany(self, entities):
+        if pygame.sprite.spritecollideany(self, entities) or any(
+                cord < 0 or cord > MAP_SIZE_PIXELS for cord in (self.x, self.y)):
             self.rect.x -= delta_x
             self.rect.y -= delta_y
+            self.x -= delta_x
+            self.y -= delta_y
+
+    def interact(self):
+        for obj in interactive:
+            if get_sprite_dist(self.rect, obj.rect) <= INTERACT_DISTANCE:
+                obj.interaction()
