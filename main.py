@@ -1,12 +1,12 @@
-import pygame
+import pygame.sprite
 
 from classes.interactive import Interactive
 from classes.map_objects import CLASSES_SIMPLES
 from constants import *
 from functions import *
-from classes.player import Player
 from classes.camera import Camera
 from sprite_groups import *
+from classes.player import Player
 
 
 def init_map(world_map) -> None:
@@ -37,9 +37,10 @@ while not wm:
     wm = generate_map()
 
 init_map(wm)
+camera = Camera()
 
 player = Player(load_image("mar.png"), WIDTH / 2, HEIGHT / 2)
-camera = Camera()
+
 while True:
     events = pygame.event.get()
     key_events = list(map(lambda e: e.type, events))
@@ -53,8 +54,7 @@ while True:
     camera.update(player)
     for s in all_sprites:
         camera.apply(s)
-
-    screen.fill(BLACK)
+    screen.fill(BLUE)
     all_sprites.draw(screen)
     all_sprites.update()
     pygame.display.flip()
