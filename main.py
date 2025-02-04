@@ -6,8 +6,7 @@ from constants import *
 from functions import *
 from classes.camera import Camera
 from sprite_groups import *
-from classes.player import Player
-
+from classes.player import player
 
 def init_map(world_map) -> None:
     w_map, o_map = world_map
@@ -39,8 +38,6 @@ while not wm:
 init_map(wm)
 camera = Camera()
 
-player = Player(load_image("mar.png"), WIDTH / 2, HEIGHT / 2)
-
 while True:
     events = pygame.event.get()
     key_events = list(map(lambda e: e.type, events))
@@ -54,8 +51,11 @@ while True:
     camera.update(player)
     for s in all_sprites:
         camera.apply(s)
+    camera.apply(player)
     screen.fill(BLUE)
     all_sprites.draw(screen)
+    player.draw(screen)
     all_sprites.update()
+    player.update()
     pygame.display.flip()
     clock.tick(FPS)

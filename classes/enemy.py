@@ -2,6 +2,7 @@ from classes.entity import Entity
 from constants import CELL_SIZE
 from functions import get_sprite_dist
 from sprite_groups import entities
+from classes.player import player
 
 
 class Enemy(Entity):

@@ -1,15 +1,15 @@
 from classes.sprite_base import SpriteObject
 from constants import *
 from sprite_groups import entities, interactive
-from functions import get_sprite_dist
+from functions import get_sprite_dist, load_image
 
 
-class Player(SpriteObject):
-    def __init__(self, player_image: pygame.Surface, pos_x: int, pos_y: int, speed: int=10):
+class Player(pygame.sprite.Sprite):
+    def __init__(self, player_image: pygame.Surface, pos_x: int, pos_y: int, speed: int = 10):
         super().__init__()
         self.image = player_image
         self.x, self.y = pos_x, pos_y
-        self.rect  = self.image.get_rect().move(pos_x, pos_y)
+        self.rect = self.image.get_rect().move(pos_x, pos_y)
         self.speed = speed
 
     def key_pressed(self, key, current_tick_keys):
@@ -32,17 +32,26 @@ class Player(SpriteObject):
 
         self.rect.x += delta_x
         self.rect.y += delta_y
+
         self.x += delta_x
         self.y += delta_y
 
         if pygame.sprite.spritecollideany(self, entities) or any(
-                cord < 0 or cord + delta > MAP_SIZE_PIXELS for cord, delta in ((self.x, self.rect.width), (self.y, self.rect.height))):
+                cord < 0 or cord + delta > MAP_SIZE_PIXELS for cord, delta in
+                ((self.x, self.rect.width), (self.y, self.rect.height))):
             self.rect.x -= delta_x
             self.rect.y -= delta_y
             self.x -= delta_x
             self.y -= delta_y
 
     def interact(self):
-        for obj in interactive:
-            if get_sprite_dist(self.rect, obj.rect) <= INTERACT_DISTANCE:
-                obj.interaction()
+        to_interact = list(filter(lambda x: get_sprite_dist(self.rect, x.rect) <= INTERACT_DISTANCE, interactive))
+
+        if to_interact:
+            min(to_interact, key=lambda x: get_sprite_dist(self.rect, x.rect)).interaction()
+
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+
+
+player = Player(load_image("mar.png"), WIDTH / 2, HEIGHT / 2)
