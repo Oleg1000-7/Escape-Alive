@@ -3,7 +3,7 @@ import os
 import pygame
 import random
 
-from constants import MAP_SIZE_CELLS, WIDTH, HEIGHT
+from constants import MAP_SIZE_CELLS, WIDTH, HEIGHT, BLACK, RED
 
 
 def resize_image(img, size=(50, 50)):
