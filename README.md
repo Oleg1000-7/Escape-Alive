@@ -45,3 +45,5 @@ Escape Alive - это игра с видом сверху в жанре rogue-li
 - **Конец игры**
 
 В конце игры будет подсчёт результатов забега и сохранение их в локальную базу данных, затем игроку можно будет выйти в меню или начать игру заново.
+
+Ссылка на презентацию: https://docs.google.com/presentation/d/1OfZEyBXehOnGcqBPFuRW2ArBRP2hm2v2bIj2gQ2VNxc/edit?usp=sharing
