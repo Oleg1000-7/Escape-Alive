@@ -1,6 +1,5 @@
-from classes.sprite_base import SpriteObject
 from constants import *
-from sprite_groups import entities, interactive
+from sprite_groups import entities, interactive, moving
 from functions import get_sprite_dist, load_image
 
 
@@ -11,14 +10,19 @@ class Player(pygame.sprite.Sprite):
         self.x, self.y = pos_x, pos_y
         self.rect = self.image.get_rect().move(pos_x, pos_y)
         self.speed = speed
+        self.hp = 100
+        self.moved = False
+        self.invincible_time = 0
 
-    def key_pressed(self, key, current_tick_keys):
-        if key in MOVE_KEYS:
-            self.move(key)
-        elif key in current_tick_keys:
-            if key == ACTIVE_KEYS["interaction"]: self.interact()
+    def key_pressed(self, all_keys, current_tick_keys):
+        for key in all_keys:
+            if key in MOVE_KEYS:
+                self.move(key)
+            elif key in current_tick_keys:
+                if key == ACTIVE_KEYS["interaction"]: self.interact()
 
     def move(self, key):
+        if not self.moved: self.moved = True
         delta_x, delta_y = 0, 0
 
         if key == ACTIVE_KEYS["up"]:
@@ -41,6 +45,7 @@ class Player(pygame.sprite.Sprite):
                 ((self.x, self.rect.width), (self.y, self.rect.height))):
             self.rect.x -= delta_x
             self.rect.y -= delta_y
+
             self.x -= delta_x
             self.y -= delta_y
 
@@ -53,5 +58,11 @@ class Player(pygame.sprite.Sprite):
     def draw(self, screen):
         screen.blit(self.image, self.rect)
 
+    def deal_damage(self, dmg: int):
+        self.hp -= dmg
+        if self.hp <= 0:
+            print("dead", self.hp)
+
 
 player = Player(load_image("mar.png"), WIDTH / 2, HEIGHT / 2)
+moving.add(player)

@@ -13,6 +13,9 @@ INTERACT_DISTANCE = CELL_SIZE * 1.5
 MAP_SIZE_CELLS = 64
 MAP_SIZE_PIXELS = CELL_SIZE * MAP_SIZE_CELLS
 FPS = 60
+ENEMIES_ATTACK_COOLDOWN = 1 * 1000
+ENEMIES_AGRO_DISTANCE = CELL_SIZE * 10
+
 with open("key_binds.json", "r", encoding="utf-8") as keys_file:
     keys = json.load(keys_file)
 ACTIVE_KEYS = {key: eval(f"pygame.{value}") for key, value in keys.items()}

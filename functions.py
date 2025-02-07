@@ -13,8 +13,7 @@ def resize_image(img, size=(50, 50)):
 def load_image(name: str, size_expected: int | tuple[int, int] | None = None) -> pygame.Surface:
     fullname = os.path.join('data', name)
     if not os.path.isfile(fullname):
-        print(f"Файл с изображением '{fullname}' не найден")
-        sys.exit()
+        fullname = "data/default.jpg"
     image = pygame.image.load(fullname)
     if size_expected and image.get_size() != (
             size_expected if isinstance(size_expected, tuple) else (size_expected, size_expected)):

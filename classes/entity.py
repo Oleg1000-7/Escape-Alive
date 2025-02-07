@@ -1,4 +1,3 @@
-import pygame
 from classes.cell import Cell
 
 class Entity(Cell):
