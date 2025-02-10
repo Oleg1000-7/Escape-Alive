@@ -12,10 +12,6 @@ screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
 
 wm = generate_map()
-WM = wm
-
-while not wm:
-    wm = generate_map()
 
 init_map(wm, enemies_count=10)
 camera = Camera()

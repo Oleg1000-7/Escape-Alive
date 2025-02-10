@@ -1,6 +1,7 @@
+from classes.particles import Punch
 from constants import *
 from sprite_groups import entities, interactive, moving
-from functions import get_sprite_dist, load_image
+from functions import get_dist, load_image
 
 
 class Player(pygame.sprite.Sprite):
@@ -12,6 +13,8 @@ class Player(pygame.sprite.Sprite):
         self.speed = speed
         self.hp = 100
         self.max_hp = 100
+        self.damage_melee = 1
+        self.money = 0
         self.moved = False
 
     def key_pressed(self, all_keys, current_tick_keys):
@@ -19,7 +22,10 @@ class Player(pygame.sprite.Sprite):
             if key in MOVE_KEYS:
                 self.move(key)
             elif key in current_tick_keys:
-                if key == ACTIVE_KEYS["interaction"]: self.interact()
+                if key == ACTIVE_KEYS["interaction"]:
+                    self.interact()
+                elif key == ACTIVE_KEYS["attack_melee"]:
+                    self.attack_melee()
 
     def move(self, key):
         if not self.moved: self.moved = True
@@ -50,13 +56,20 @@ class Player(pygame.sprite.Sprite):
             self.x -= delta_x
             self.y -= delta_y
 
-    def interact(self):
-        to_interact = list(filter(lambda x: get_sprite_dist(self.rect, x.rect) <= INTERACT_DISTANCE, interactive))
+    def interact(self) -> None:
+        to_interact = list(filter(lambda x: get_dist(self.rect, x.rect) <= INTERACT_DISTANCE, interactive))
 
         if to_interact:
-            min(to_interact, key=lambda x: get_sprite_dist(self.rect, x.rect)).interaction()
+            min(to_interact, key=lambda x: get_dist(self.rect, x.rect)).interaction()
 
-    def draw(self, screen):
+    def attack_melee(self):
+        mouse_pos = mouse_x, mouse_y = pygame.mouse.get_pos()
+        distance = get_dist(mouse_pos, self.rect.center)
+        x = self.rect.centerx + (mouse_x - self.rect.centerx) / distance * CELL_SIZE
+        y = self.rect.centery + (mouse_y - self.rect.centery) / distance * CELL_SIZE
+        Punch(x, y, animation_speed=1)
+
+    def draw(self, screen: pygame.Surface) -> None:
         screen.blit(self.image, self.rect)
 
     def deal_damage(self, dmg: int):
@@ -64,15 +77,22 @@ class Player(pygame.sprite.Sprite):
         if self.hp <= 0:
             print("dead", self.hp)
 
-    def get_hp_percents(self):
+    def get_hp_percents(self) -> float:
         return self.hp / self.max_hp
 
+    def get_money(self) -> int:
+        return self.money
 
-player = Player(load_image("mar.png"), WIDTH / 2, HEIGHT / 2)
+    def use_money(self, cost: int) -> None:
+        self.money -= cost
+
+
+player = Player(load_image("entities/mar.png", (30, 45)), WIDTH / 2, HEIGHT / 2)
 moving.add(player)
+
 
 def draw_hud(screen, buffs: list[pygame.Surface, (int, int)] | list):
     for surf, coord in buffs:
         screen.blit(surf, surf.get_rect().move(*coord))
-    pygame.draw.rect(screen, BLACK, pygame.Rect(50, 50, 50 + (WIDTH / 10) * player.get_hp_percents(), 50 + HEIGHT / 10))
-    pygame.draw.rect(screen, RED, pygame.Rect(50, 50, 50 + (WIDTH / 10) * player.get_hp_percents(), 50 + HEIGHT / 10))
+    pygame.draw.rect(screen, BLACK, pygame.Rect(20, 20, 70 + WIDTH / 10, HEIGHT / 15))
+    pygame.draw.rect(screen, RED, pygame.Rect(20, 20, 70 + (WIDTH / 10) * player.get_hp_percents(), HEIGHT / 15))

@@ -3,5 +3,6 @@
   "left": "K_a",
   "down": "K_s",
   "right": "K_d",
-  "interaction": "K_e"
+  "interaction": "K_e",
+  "attack_melee": "K_SPACE"
 }
