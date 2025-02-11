@@ -17,7 +17,7 @@ wm = generate_map()
 init_map(wm, enemies_count=45)
 camera = Camera()
 play = True
-gold = Text(str(player.get_money()), WIDTH // 2, 20, BLACK)
+gold = Text(str(player.get_money()), WIDTH // 2, 20, BLACK, sprite_like=False)
 
 
 def draw_hud(screen, buffs: list[pygame.Surface, (int, int)] | list):
