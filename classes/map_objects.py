@@ -56,8 +56,6 @@ def init_map(world_map, enemies_count=0) -> None:
         w_map[o[0]][o[1]] = 11
         o_map.remove(o)
 
-    # w_map[int(WIDTH / 2 / CELL_SIZE)][int(HEIGHT / 2 / CELL_SIZE)] = 1
-
     for y in range(MAP_SIZE_CELLS):
         for x in range(MAP_SIZE_CELLS):
             Cell(floor_image, CELL_SIZE * x, CELL_SIZE * y)
@@ -74,6 +72,6 @@ def init_map(world_map, enemies_count=0) -> None:
                 if not w_map[y][x] and randint(1, 100) == 1:
                     Enemy(list(
                         map(lambda name: "entities/enemy_slime/" + name, os.listdir("data/entities/enemy_slime"))),
-                          CELL_SIZE * x, CELL_SIZE * y, 10, 1)
+                        CELL_SIZE * x, CELL_SIZE * y, 10, 1)
                     enemies_count -= 1
                 if enemies_count <= 0: break

@@ -1,14 +1,13 @@
 import math
 
 from classes.particles import Punch, Bullet
-from classes.text import Text
 from constants import *
 from sprite_groups import entities, interactive, moving
 from functions import get_dist, load_image
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, player_image: pygame.Surface, pos_x: int, pos_y: int, speed: int = 10):
+    def __init__(self, player_image: pygame.Surface, pos_x: int, pos_y: int, speed: int = 5):
         super().__init__()
         self.image = player_image
         self.x, self.y = pos_x, pos_y
@@ -74,7 +73,7 @@ class Player(pygame.sprite.Sprite):
         distance = get_dist(mouse_pos, self.rect.center)
         x = self.rect.centerx + (mouse_x - self.rect.centerx) / distance * CELL_SIZE
         y = self.rect.centery + (mouse_y - self.rect.centery) / distance * CELL_SIZE
-        Punch(x, y, animation_speed=1)
+        Punch(self, x, y, animation_speed=1)
 
     def attack_ranged(self) -> None:
         mouse_pos = mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -113,5 +112,5 @@ class Player(pygame.sprite.Sprite):
         self.money += money
 
 
-player = Player(load_image("entities/mar.png", (30, 45)), WIDTH / 2, HEIGHT / 2)
+player = Player(load_image("entities/mar.png", (45, 45)), WIDTH / 2, HEIGHT / 2)
 moving.add(player)

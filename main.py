@@ -12,7 +12,13 @@ pygame.init()
 screen = pygame.display.set_mode(SIZE)
 clock = pygame.time.Clock()
 
+wm = generate_map()
+
+init_map(wm, enemies_count=45)
+camera = Camera()
+play = True
 gold = Text(str(player.get_money()), WIDTH // 2, 20, BLACK)
+
 
 def draw_hud(screen, buffs: list[pygame.Surface, (int, int)] | list):
     for surf, coord in buffs:
@@ -22,12 +28,7 @@ def draw_hud(screen, buffs: list[pygame.Surface, (int, int)] | list):
     gold.set_text(str(player.get_money()))
 
 
-wm = generate_map()
-
-init_map(wm, enemies_count=10)
-camera = Camera()
-
-while True:
+while play == True:
     events = pygame.event.get()
     key_events = list(map(lambda e: e.type, events))
     mouse_key_pressed_current_tick = list(
@@ -48,6 +49,7 @@ while True:
     player.draw(screen)
     all_sprites.update()
     player.update()
+    hud_elements.update(screen)
 
     draw_hud(screen, [])
     pygame.display.flip()

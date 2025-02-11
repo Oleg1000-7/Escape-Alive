@@ -1,7 +1,6 @@
 import json
 import pygame
 
-
 BLACK = pygame.Color("#000000")
 WHITE = pygame.Color("#ffffff")
 RED = pygame.Color("#ff0000")

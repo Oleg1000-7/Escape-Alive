@@ -9,9 +9,29 @@ from sprite_groups import entities, moving
 
 
 class Punch(Cell):
-    def __init__(self, pos_x: int, pos_y: int, animation_speed: int = FPS):
+    def __init__(self, parent, pos_x: int, pos_y: int, animation_speed: int = FPS):
         image = iter(map(lambda x: "other/punches/" + x, os.listdir("data/other/punches")))
         super().__init__(image, pos_x, pos_y, animation_speed=animation_speed)
+        self.parent = parent
+
+    def destroy(self):
+        for group in self.groups():
+            group.remove(self)
+        self.kill()
+
+    def update(self):
+        super().update()
+        target = pygame.sprite.spritecollideany(self, entities)
+        if not target:
+            target = pygame.sprite.spritecollide(self, moving, False)
+            if self.parent in target:
+                target.remove(self.parent)
+            if target:
+                target = target[0]
+
+        if target:
+            self.parent.deal_damage(target)
+            self.destroy()
 
 
 class Bullet(Cell):
