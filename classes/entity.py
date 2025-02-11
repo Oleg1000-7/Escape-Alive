@@ -8,5 +8,9 @@ class Entity(Cell):
         self.hp = hp
 
     def update(self):
+        super().update()
         if self.hp <= 0:
             self.kill()
+
+    def get_damage(self, damage: int) -> None:
+        self.hp -= damage

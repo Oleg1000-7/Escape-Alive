@@ -12,7 +12,7 @@ from classes.player import player
 
 class Enemy(Entity):
     def __init__(self, image: pygame.Surface | list[str] | Iterator, pos_x: int, pos_y: int, hp: int,
-                 speed: int = 0, damage: int = 5):
+                 speed: int = 0, damage: int = 5, cost: int = 5):
         super().__init__(image, pos_x, pos_y, hp, groups=moving)
         self.speed = speed
         self.agro_distance = ENEMIES_AGRO_DISTANCE
@@ -20,8 +20,12 @@ class Enemy(Entity):
         self.damage = damage
         self.previous_attack = 0
         self.do_attack = False
+        self.cost = cost
 
     def update(self):
+        if self.hp <= 0:
+            player.add_money(self.cost)
+        super().update()
         if player.moved:
             d = get_dist(self.rect.center, player.rect.center)
             if self.agro_distance > d:
@@ -63,5 +67,5 @@ class Enemy(Entity):
     def attack(self):
         current_tick = pygame.time.get_ticks()
         if current_tick - self.previous_attack > ENEMIES_ATTACK_COOLDOWN:
-            player.deal_damage(self.damage)
+            player.get_damage(self.damage)
             self.previous_attack = current_tick

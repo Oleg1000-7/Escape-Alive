@@ -4,5 +4,6 @@
   "down": "K_s",
   "right": "K_d",
   "interaction": "K_e",
-  "attack_melee": "K_SPACE"
+  "attack_melee": "K_SPACE",
+  "attack_range": "MOUSEBUTTONDOWN"
 }

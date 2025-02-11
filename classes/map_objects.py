@@ -7,6 +7,7 @@ import pygame
 
 from classes.cell import Cell
 from classes.enemy import Enemy
+from classes.entity import Entity
 from classes.interactive import Interactive
 from classes.player import player
 from classes.text import Text
@@ -15,11 +16,11 @@ from functions import load_image
 from sprite_groups import *
 
 
-class Obstacle(Cell):
+class Obstacle(Entity):
     def __init__(self, pos_x: int, pos_y: int, **kwargs):
         image = load_image(f"obstacles/{random.choice(("tree2.png", "tree2.png", "tree.png", "rock.png"))}",
                            do_resize=False)
-        super().__init__(image, pos_x, pos_y + image.get_height() // 2, groups=entities)
+        super().__init__(image, pos_x, pos_y + image.get_height() // 2, groups=entities, hp=500)
 
 
 cost = 50

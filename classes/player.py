@@ -1,4 +1,7 @@
-from classes.particles import Punch
+import math
+
+from classes.particles import Punch, Bullet
+from classes.text import Text
 from constants import *
 from sprite_groups import entities, interactive, moving
 from functions import get_dist, load_image
@@ -13,11 +16,13 @@ class Player(pygame.sprite.Sprite):
         self.speed = speed
         self.hp = 100
         self.max_hp = 100
-        self.damage_melee = 1
+        self.damage_melee = 10
+        self.damage_ranged = 5
         self.money = 0
+        self.attack_cooldown = FPS
         self.moved = False
 
-    def key_pressed(self, all_keys, current_tick_keys):
+    def key_pressed(self, all_keys, current_tick_keys, current_tick_mouse):
         for key in all_keys:
             if key in MOVE_KEYS:
                 self.move(key)
@@ -26,6 +31,8 @@ class Player(pygame.sprite.Sprite):
                     self.interact()
                 elif key == ACTIVE_KEYS["attack_melee"]:
                     self.attack_melee()
+        if 1 in current_tick_mouse:
+            self.attack_ranged()
 
     def move(self, key):
         if not self.moved: self.moved = True
@@ -62,20 +69,36 @@ class Player(pygame.sprite.Sprite):
         if to_interact:
             min(to_interact, key=lambda x: get_dist(self.rect, x.rect)).interaction()
 
-    def attack_melee(self):
+    def attack_melee(self) -> None:
         mouse_pos = mouse_x, mouse_y = pygame.mouse.get_pos()
         distance = get_dist(mouse_pos, self.rect.center)
         x = self.rect.centerx + (mouse_x - self.rect.centerx) / distance * CELL_SIZE
         y = self.rect.centery + (mouse_y - self.rect.centery) / distance * CELL_SIZE
         Punch(x, y, animation_speed=1)
 
+    def attack_ranged(self) -> None:
+        mouse_pos = mouse_x, mouse_y = pygame.mouse.get_pos()
+        distance = get_dist(mouse_pos, self.rect.center)
+        delta_x = -self.rect.centerx + mouse_x
+        delta_y = self.rect.centery - mouse_y
+
+        angle = math.acos(delta_x / distance)
+
+        if delta_y < 0:
+            angle = 2 * math.pi - angle
+
+        Bullet(self, load_image("other/bullet.png", do_resize=False), self.rect.centerx, self.rect.centery, angle)
+
     def draw(self, screen: pygame.Surface) -> None:
         screen.blit(self.image, self.rect)
 
-    def deal_damage(self, dmg: int):
+    def get_damage(self, dmg: int):
         self.hp -= dmg
         if self.hp <= 0:
             print("dead", self.hp)
+
+    def deal_damage(self, target):
+        target.get_damage(self.damage_ranged)
 
     def get_hp_percents(self) -> float:
         return self.hp / self.max_hp
@@ -86,13 +109,9 @@ class Player(pygame.sprite.Sprite):
     def use_money(self, cost: int) -> None:
         self.money -= cost
 
+    def add_money(self, money: int) -> None:
+        self.money += money
+
 
 player = Player(load_image("entities/mar.png", (30, 45)), WIDTH / 2, HEIGHT / 2)
 moving.add(player)
-
-
-def draw_hud(screen, buffs: list[pygame.Surface, (int, int)] | list):
-    for surf, coord in buffs:
-        screen.blit(surf, surf.get_rect().move(*coord))
-    pygame.draw.rect(screen, BLACK, pygame.Rect(20, 20, 70 + WIDTH / 10, HEIGHT / 15))
-    pygame.draw.rect(screen, RED, pygame.Rect(20, 20, 70 + (WIDTH / 10) * player.get_hp_percents(), HEIGHT / 15))

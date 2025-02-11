@@ -38,7 +38,7 @@ class Cell(SpriteObject):
 
     def animate(self) -> pygame.Surface:
         if isinstance(self.images, list):
-            self.frame = self.frame + 1 if not self.frame + 1 > len(self.images) else 0
+            self.frame = self.frame + 1 if not self.frame + 1 >= len(self.images) else 0
             return load_image(self.images[self.frame], do_resize=False)
         else:
             try:
