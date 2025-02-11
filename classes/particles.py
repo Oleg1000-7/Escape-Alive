@@ -19,7 +19,7 @@ class Punch(Cell):
             group.remove(self)
         self.kill()
 
-    def update(self):
+    def update(self, *args, **kwargs):
         super().update()
         target = pygame.sprite.spritecollideany(self, entities)
         if not target:
@@ -48,7 +48,7 @@ class Bullet(Cell):
             group.remove(self)
         self.kill()
 
-    def update(self):
+    def update(self, *args, **kwargs):
         self.rect.x += self.speed * math.cos(self.angle)
         self.rect.y -= self.speed * math.sin(self.angle)
 

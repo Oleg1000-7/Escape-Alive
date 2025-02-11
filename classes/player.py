@@ -111,6 +111,8 @@ class Player(pygame.sprite.Sprite):
     def add_money(self, money: int) -> None:
         self.money += money
 
+    def is_alive(self) -> bool:
+        return player.hp > 0
 
 player = Player(load_image("entities/mar.png", (45, 45)), WIDTH / 2, HEIGHT / 2)
 moving.add(player)

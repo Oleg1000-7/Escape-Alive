@@ -8,7 +8,7 @@ class Entity(Cell):
         super().__init__(image, pos_x, pos_y, groups=groups)
         self.hp = hp
 
-    def update(self):
+    def update(self, *args, **kwargs):
         super().update()
         if self.hp <= 0:
             self.kill()

@@ -22,7 +22,7 @@ class Enemy(Entity):
         self.do_attack = False
         self.cost = cost
 
-    def update(self):
+    def update(self, *args, **kwargs):
         if self.hp <= 0:
             player.add_money(self.cost)
         super().update()

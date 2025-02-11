@@ -25,7 +25,7 @@ class Cell(SpriteObject):
         self.rect = self.image.get_rect().move(pos_x, pos_y)
         self.center = self.rect.center
 
-    def update(self):
+    def update(self, *args, **kwargs):
         if self.animated:
             if self.tick <= self.animation_speed:
                 self.tick += 1

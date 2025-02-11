@@ -35,7 +35,7 @@ while play == True:
         map(lambda e: e.button, filter(lambda e: e.type == pygame.MOUSEBUTTONDOWN, events)))
     keys_pressed_current_tick = list(map(lambda e: e.key, filter(lambda e: e.type == pygame.KEYDOWN, events)))
 
-    if pygame.QUIT in key_events or pygame.K_ESCAPE in keys_pressed_current_tick: terminate()
+    if pygame.QUIT in key_events or pygame.K_ESCAPE in keys_pressed_current_tick or not player.is_alive(): terminate()
 
     keys = filter(lambda x: pygame.key.get_pressed()[x], ACTIVE_KEYS.values())
     player.key_pressed(keys, keys_pressed_current_tick, mouse_key_pressed_current_tick)
@@ -47,7 +47,7 @@ while play == True:
     screen.fill(BLUE)
     all_sprites.draw(screen)
     player.draw(screen)
-    all_sprites.update()
+    all_sprites.update(screen)
     player.update()
     hud_elements.update(screen)
 

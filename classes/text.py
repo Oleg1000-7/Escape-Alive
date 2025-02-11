@@ -19,5 +19,5 @@ class Text(pygame.sprite.Sprite):
     def set_text(self, text: str) -> None:
         self.image = self.font.render(text, True, self.color)
 
-    def update(self, screen):
+    def update(self, screen, *args, **kwargs):
         screen.blit(self.image, self.rect)
