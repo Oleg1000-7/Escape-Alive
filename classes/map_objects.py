@@ -40,6 +40,7 @@ class LootBox(Interactive):
             w, h = self.size
             image = self.full_image.subsurface(pygame.Rect((w / 2, 0), (w / 2, h)))
             self.image = image
+            player.use_money(cost)
 
 
 floor_image = load_image("floor/foliage3.png", (50, 50))

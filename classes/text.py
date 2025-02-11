@@ -11,13 +11,18 @@ class Text(pygame.sprite.Sprite):
             super().__init__(hud_elements)
         else:
             super().__init__(all_sprites)
+        self.line = text
         self.font = pygame.font.Font(None, 50)
         self.image = self.font.render(text, True, color)
         self.rect = self.image.get_rect().move(pos_x, pos_y)
         self.color = color
 
     def set_text(self, text: str) -> None:
-        self.image = self.font.render(text, True, self.color)
+        self.line = text
+        self.image = self.font.render(self.line, True, self.color)
 
     def update(self, screen, *args, **kwargs):
         screen.blit(self.image, self.rect)
+
+    def text(self) -> str:
+        return self.line

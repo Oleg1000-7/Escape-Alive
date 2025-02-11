@@ -1,3 +1,4 @@
+import math
 from typing import Iterator
 
 import pygame
@@ -9,7 +10,7 @@ from functions import load_image
 
 class Cell(SpriteObject):
     def __init__(self, image: pygame.Surface | list[str] | Iterator, pos_x: int, pos_y: int,
-                 groups: list[pygame.sprite.Group] | pygame.sprite.Group | None = None, animation_speed: int = FPS):
+                 groups: list[pygame.sprite.Group] | pygame.sprite.Group | None = None, animation_speed: int = FPS, angle: float | None = None):
         super().__init__(groups)
         if isinstance(image, pygame.Surface):
             self.image = image
@@ -21,7 +22,8 @@ class Cell(SpriteObject):
             self.frame = 0
             self.animation_speed = animation_speed
             self.image = self.animate()
-
+        if angle:
+            self.image = pygame.transform.rotate(image, math.degrees(angle))
         self.rect = self.image.get_rect().move(pos_x, pos_y)
         self.center = self.rect.center
 

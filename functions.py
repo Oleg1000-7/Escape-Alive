@@ -7,6 +7,10 @@ from constants import MAP_SIZE_CELLS, WIDTH, HEIGHT
 
 
 def resize_image(img, size=(50, 50)):
+    if size[0] == 0:
+        size = (img.get_width(), size[1])
+    if size[1] == 0:
+        size = (size[0], img.get_height())
     return pygame.transform.scale(img, size)
 
 
@@ -29,7 +33,6 @@ def load_image(name: str, size_expected: int | tuple[int, int] | None = None, do
 def terminate():
     pygame.quit()
     sys.exit()
-
 
 def generate_map(fill: int = 0) -> tuple[list[list[int]], list[tuple]] | None:
     size = MAP_SIZE_CELLS

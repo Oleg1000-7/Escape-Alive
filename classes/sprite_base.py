@@ -11,3 +11,8 @@ class SpriteObject(pygame.sprite.Sprite):
             super().__init__(all_sprites, groups)
         else:
             super().__init__(all_sprites)
+
+    def destroy(self):
+        for group in self.groups():
+            group.remove(self)
+        self.kill()

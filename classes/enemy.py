@@ -12,7 +12,7 @@ from classes.player import player
 
 class Enemy(Entity):
     def __init__(self, image: pygame.Surface | list[str] | Iterator, pos_x: int, pos_y: int, hp: int,
-                 speed: int = 0, damage: int = 5, cost: int = 5):
+                 speed: int = 0, damage: int = 5, cost: int = 10):
         super().__init__(image, pos_x, pos_y, hp, groups=moving)
         self.speed = speed
         self.agro_distance = ENEMIES_AGRO_DISTANCE
